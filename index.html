@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <title>고등학교 수학 문제 생성기</title>
     
-    <!-- 외부 라이브러리 (수식 렌더링 및 폰트) -->
+    <!-- 1. 외부 라이브러리 및 폰트 연동 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet"/>
     
-    <!-- 분리된 디자인 파일 연결 -->
+    <!-- 2. 외부 CSS 파일 연결 -->
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
@@ -30,105 +30,175 @@
                 <span class="sp-badge">💡 힌트·풀이 제공</span>
                 <span class="sp-badge">✏️ 수식 입력기</span>
             </div>
+            <div class="sp-badges" style="margin-top:6px">
+                <span class="sp-badge">📝 시험 모드</span>
+                <span class="sp-badge">📕 오답노트</span>
+            </div>
             <button class="sp-start" onclick="document.getElementById('splash').classList.add('hidden')">시작하기</button>
             <div class="sp-desc">객관식 · 단답형 · 서술형 · 난이도 5단계</div>
+            
+            <!-- 하단 제작자 및 AI 엔진 정보 -->
+            <div style="margin-top:28px;width:100%;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;display:flex;align-items:center;justify-content:space-between;position:relative">
+                <div style="display:flex;align-items:center;gap:0;flex:1;justify-content:space-around;padding-right:16px">
+                    <!-- Claude 로고 -->
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                        <img src="data:image/png;base64,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朋" width="30" height="30" style="border-radius:8px;object-fit:cover"/>
+                        <div style="font-size:9px;color:rgba(255,200,100,.75);font-weight:600">Claude</div>
+                    </div>
+                    <!-- Groq 로고 -->
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0id2hpdGUiLz48dGV4dCB4PSI1MCIgeT0iNjAiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMxMTExMTEiPkc8L3RleHQ+PC9zdmc+" width="30" height="30" style="border-radius:8px;object-fit:cover"/>
+                        <div style="font-size:9px;color:rgba(150,200,255,.75);font-weight:600">Groq</div>
+                    </div>
+                    <!-- Antigravity 로고 -->
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzQzMzhjYSIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0id2hpdGUiPkE8L3RleHQ+PC9zdmc+" width="30" height="30" style="border-radius:8px;object-fit:cover"/>
+                        <div style="font-size:9px;color:rgba(200,200,255,.75);font-weight:600">AG</div>
+                    </div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1.5px;margin-bottom:3px">MAKER</div>
+                    <div style="font-size:13.5px;font-weight:700;color:rgba(255,255,255,.85)">이상진</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- 2. 상단 헤더 -->
+    <!-- 2. 상단 헤더 영역 -->
     <header>
         <div class="logo">
             <div class="logo-ico">∑</div>
             <div>
-                <div class="logo-tx">수학 문제 생성기</div>
-                <div class="logo-sb">2022 Revised Curriculum</div>
+                <div class="logo-tx">고등학교 수학 문제 생성기</div>
+                <div class="logo-sb">2022 개정 교육과정 · 고1 · 고2 · 고3</div>
             </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px">
-            <div id="streakBadge" class="streak-badge">🔥 <span id="streakNum" class="streak-num">0</span></div>
-            <button id="themeBtn" class="theme-btn">🌙</button>
+        <div style="display:flex;align-items:center;gap:8px">
+            <button id="kbToggle" class="theme-btn" title="수식 키보드" style="font-size:14px">⌨️</button>
+            <button class="wn-hbtn" onclick="wnOpen()">📕 오답 노트 <span class="wn-cnt" id="wnCount">0</span></button>
+            <div class="hbadge">수학교육과 캡스톤디자인I</div>
+            <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="다크/라이트 모드">🌙</button>
         </div>
     </header>
 
-    <!-- 3. 메인 작업 영역 -->
-    <div class="ws">
-        <!-- 사이드바: 설정 및 메뉴 -->
-        <aside>
-            <div class="sbl">GRADE / SUBJECT</div>
-            <div id="gradeG" class="grade-tabs">
-                <button class="grade-tab on" data-g="고1">고1</button>
-                <button class="grade-tab" data-g="고2">고2</button>
-                <button class="grade-tab" data-g="고3">고3</button>
-            </div>
-            <div id="subjG" class="grade-tabs" style="margin-top:4px"></div>
-            <div id="subG" class="sub-list" style="margin-top:6px"></div>
-            
-            <div class="sbl" style="margin-top:12px">LEVEL</div>
-            <div id="lvG" class="lv-row">
-                <button class="lv-btn" data-lv="1" data-l="기초" data-c="#94a3b8" data-d="개념 확인 수준">1</button>
-                <button class="lv-btn on" data-lv="2" data-l="기본" data-c="#10b981" data-d="교과서 예제/유제 수준">2</button>
-                <button class="lv-btn" data-lv="3" data-l="발전" data-c="#3b82f6" data-d="유형별 응용 문제">3</button>
-                <button class="lv-btn" data-lv="4" data-l="심화" data-c="#8b5cf6" data-d="복합 개념 응용 문제">4</button>
-                <button class="lv-btn" data-lv="5" data-l="최고난도" data-c="#ef4444" data-d="수능/모의고사 킬러 수준">5</button>
-            </div>
-            <div id="lvHint" class="lv-hint">교과서 예제/유제 수준</div>
-
-            <div class="mode-btns">
-                <button id="mixBtn" class="mix-btn">단원 혼합 출제</button>
-                <button id="examBtn" class="exam-btn">시험 모드 (타이머)</button>
-                <button id="wnOpenBtn" class="wn-hbtn">📒 오답 노트 <span id="wnTotalCnt" class="wn-cnt">0</span></button>
-            </div>
-            <button id="genBtn">문제 생성하기</button>
-        </aside>
-
-        <!-- 중앙 패널: 문제 출력 -->
-        <main id="cp" class="cp">
-            <div id="emptySt" class="empty-st">
-                <div class="empty-ico">✍️</div>
-                <div class="empty-tx">왼쪽에서 단원을 선택하고<br>문제를 생성해 보세요.</div>
-            </div>
-        </main>
-
-        <!-- 우측 패널: 힌트 및 수식 입력기 -->
-        <section id="rp" class="rp">
-            <div class="rp-empty">
-                <div class="rp-empty-ico">💡</div>
-                <div class="rp-empty-tx">문제를 선택하면<br>여기에 힌트와 풀이가 나타납니다.</div>
-            </div>
-        </section>
-
-        <!-- 수식 입력기 패널 -->
-        <section id="mkPanel" class="kp">
-            <div class="kp-scroll">
-                <div class="kp-lbl">MATH KEYBOARD</div>
-                <button id="latexCopyBtn" class="latex-copy-btn">
-                    📋 수식 가져오기<br><span style="font-size:10.5px;font-weight:500;opacity:.75">(드래그 선택 후 클릭)</span>
-                </button>
-                <textarea id="mkInput" class="mk-input" placeholder="여기에 직접 입력하거나 아래 키보드를 사용하세요..."></textarea>
-                <div id="mkRendered" class="mk-rendered"><span class="mk-ph">수식 미리보기</span></div>
-                <button id="mkApplyBtn" class="mk-apply-btn">답안에 입력하기</button>
-                <button id="kbToggle" class="ty-btn">가상 키보드 열기/닫기</button>
-            </div>
-            <div id="kbArea" class="kb-area">
-                <div id="mkGrid" class="kb-inner mk-grid"></div>
-            </div>
-        </section>
+    <!-- 3. 가상 수식 키보드 영역 (숨김 처리됨) -->
+    <div id="kbArea" class="kb-area">
+        <div class="kb-inner">
+            <div id="mkGrid" class="mk-grid"></div>
+        </div>
     </div>
 
-    <!-- 분리된 자바스크립트 파일들 연결 (순서가 중요함) -->
+    <!-- 4. 메인 작업 레이아웃 -->
+    <div class="ws">
+        <!-- 왼쪽 사이드바 (설정) -->
+        <aside>
+            <div class="sbl">⚙ 문제 설정</div>
+            <div>
+                <div class="fl">학년</div>
+                <div class="grade-tabs" id="gradeG">
+                    <button class="grade-tab on" data-g="고1">고1</button>
+                    <button class="grade-tab" data-g="고2">고2</button>
+                    <button class="grade-tab" data-g="고3">고3</button>
+                </div>
+            </div>
+            <div>
+                <div class="fl">단원</div>
+                <div id="subjG" style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap"></div>
+                <div class="sub-list" id="subG"></div>
+                <div class="mode-btns">
+                    <button class="mix-btn" id="mixBtn">단원 혼합 출제</button>
+                    <button class="exam-btn" id="examBtn"><span class="exam-dot" id="examDot"></span><span id="examBtnTxt">시험 모드</span></button>
+                </div>
+            </div>
+            <div>
+                <div class="fl">난이도</div>
+                <div class="lv-row" id="lvG">
+                    <button class="lv-btn" data-lv="1" data-c="#16a34a" data-d="공식 직접 대입" data-l="기초">기초</button>
+                    <button class="lv-btn on" data-lv="2" data-c="#2563eb" data-d="공식 단순 적용" data-l="기본">기본</button>
+                    <button class="lv-btn" data-lv="3" data-c="#d97706" data-d="개념 응용" data-l="표준">표준</button>
+                    <button class="lv-btn" data-lv="4" data-c="#ea580c" data-d="복합 조건" data-l="심화">심화</button>
+                    <button class="lv-btn" data-lv="5" data-c="#dc2626" data-d="역발상·다단계" data-l="최고">최고</button>
+                </div>
+                <div class="lv-hint" id="lvHint">공식 단순 적용</div>
+            </div>
+            <div>
+                <div class="fl">문제 유형</div>
+                <div class="ty-row" id="tyG">
+                    <button class="ty-btn on" data-v="OX형">OX형</button>
+                    <button class="ty-btn" data-v="객관식">객관식</button>
+                    <button class="ty-btn" data-v="단답형">단답형</button>
+                    <button class="ty-btn" data-v="서술형">서술형</button>
+                </div>
+            </div>
+            <div>
+                <div class="fl">문항 수</div>
+                <div class="cnt-ctrl">
+                    <button class="cnt-btn" id="cDn">−</button>
+                    <div class="cnt-n" id="cDsp">3</div>
+                    <button class="cnt-btn" id="cUp">+</button>
+                </div>
+            </div>
+            <button id="genBtn">✦ 문제 생성하기</button>
+        </aside>
+
+        <!-- 중앙 패널 (문제 출력) -->
+        <div class="cp" id="cp">
+            <div class="empty-st">
+                <div class="empty-ico">📝</div>
+                <div class="empty-tx">왼쪽에서 설정을 선택하고<br>문제 생성하기를 누르세요</div>
+            </div>
+        </div>
+
+        <!-- 우측 패널 (힌트 및 해설) -->
+        <div class="rp" id="rp">
+            <div class="rp-empty">
+                <div class="rp-empty-ico">👆</div>
+                <div class="rp-empty-tx">문제를 클릭하면<br>힌트·정답·풀이가<br>여기에 나옵니다</div>
+            </div>
+        </div>
+
+        <!-- 우측 끝 패널 (수식 입력기) -->
+        <div class="kp">
+            <div class="kp-scroll">
+                <div class="kp-lbl">📐 수식 입력기</div>
+                <textarea id="mkInput" class="mk-input" placeholder="여기에 직접 입력&#10;한글·수식·LaTeX 가능&#10;예) 3x^2+2x-1"></textarea>
+                <div id="mkRendered" class="mk-rendered"><span class="mk-ph">수식 미리보기</span></div>
+                <button class="mk-apply-btn" id="mkApplyBtn">↩ 답안에 입력하기</button>
+                <div class="mk-sidebar-info" style="font-size:10px;color:var(--dim);margin-top:10px">상단 ⌨️ 버튼을 눌러 확장 키보드를 사용하세요.</div>
+                <button class="latex-copy-btn" id="latexCopyBtn">📋 수식 가져오기<br><span style="font-size:10.5px;font-weight:500;opacity:.75">(드래그 선택 후 클릭)</span></button>
+                <div class="api-section">
+                    <div class="api-lbl">🤖 Groq API (서술형 AI 채점)</div>
+                    <div class="api-row">
+                        <input class="api-in" id="apiIn" type="password" placeholder="gsk_... 키 입력"/>
+                        <button class="api-save" id="apiSaveBtn">저장</button>
+                    </div>
+                    <div class="api-status" id="apiStatus">키 없으면 키워드 기반 채점</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 분리된 자바스크립트 파일들 연결 (순서가 매우 중요함) -->
+    <!-- 모든 로직은 js 폴더 내의 각 파일로 옮겨져야 합니다. -->
     <script src="js/core/constants.js"></script>
     <script src="js/core/state.js"></script>
     <script src="js/core/utils.js"></script>
     <script src="js/ui/renderer.js"></script>
     <script src="js/ui/keyboard.js"></script>
     <script src="js/ui/exam.js"></script>
-<!-- 추가된 단원별 파일들 -->
-<script src="js/problems/h1/polynomials.js"></script>
-<!-- 나중에 추가할 파일들:
-<script src="js/problems/h1/equations.js"></script>
-<script src="js/problems/h1/geometry.js"></script>
--->
-
-    <!-- 고2, 고3 및 중등 문제는 나중에 추가 -->
+    
+    <!-- 문제 데이터 은행 (내용이 매우 많으므로 별도 분리 권장) -->
+    <script src="js/problems/bank.js"></script>
+    
+    <!-- 앱 초기화 실행 -->
+    <script>
+        window.onload = () => {
+            if (typeof initApp === 'function') {
+                initApp();
+            }
+            // 수동 테마 초기화 예시
+            document.body.setAttribute('data-theme', 'light');
+        };
+    </script>
 </body>
 </html>
