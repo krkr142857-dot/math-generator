@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>고등학교 수학 문제 생성기</title>
+    
+    <!-- 외부 라이브러리 (수식 렌더링 및 폰트) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet"/>
+    
+    <!-- 분리된 디자인 파일 연결 -->
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+    <!-- 1. 스플래시 화면 (로딩 화면) -->
+    <div id="splash">
+        <div class="sp-card">
+            <div class="sp-icon">∑</div>
+            <div class="sp-title">고등학교 수학 문제 생성기</div>
+            <div class="sp-sub">2022 개정 교육과정</div>
+            <div class="sp-grade-row"><span class="sp-badge-lg">📐 고1 공통수학</span></div>
+            <div class="sp-grade-row"><span class="sp-badge-lg">📊 고2 수학Ⅰ·Ⅱ</span></div>
+            <div class="sp-grade-row" style="margin-bottom:18px"><span class="sp-badge-lg">∫ 고3 미적분·확통</span></div>
+            <div class="sp-badges">
+                <span class="sp-badge">🤖 AI 서술형 채점</span>
+                <span class="sp-badge">💡 힌트·풀이 제공</span>
+                <span class="sp-badge">✏️ 수식 입력기</span>
+            </div>
+            <button class="sp-start" onclick="document.getElementById('splash').classList.add('hidden')">시작하기</button>
+            <div class="sp-desc">객관식 · 단답형 · 서술형 · 난이도 5단계</div>
+        </div>
+    </div>
+
+    <!-- 2. 상단 헤더 -->
+    <header>
+        <div class="logo">
+            <div class="logo-ico">∑</div>
+            <div>
+                <div class="logo-tx">수학 문제 생성기</div>
+                <div class="logo-sb">2022 Revised Curriculum</div>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+            <div id="streakBadge" class="streak-badge">🔥 <span id="streakNum" class="streak-num">0</span></div>
+            <button id="themeBtn" class="theme-btn">🌙</button>
+        </div>
+    </header>
+
+    <!-- 3. 메인 작업 영역 -->
+    <div class="ws">
+        <!-- 사이드바: 설정 및 메뉴 -->
+        <aside>
+            <div class="sbl">GRADE / SUBJECT</div>
+            <div id="gradeG" class="grade-tabs">
+                <button class="grade-tab on" data-g="고1">고1</button>
+                <button class="grade-tab" data-g="고2">고2</button>
+                <button class="grade-tab" data-g="고3">고3</button>
+            </div>
+            <div id="subjG" class="grade-tabs" style="margin-top:4px"></div>
+            <div id="subG" class="sub-list" style="margin-top:6px"></div>
+            
+            <div class="sbl" style="margin-top:12px">LEVEL</div>
+            <div id="lvG" class="lv-row">
+                <button class="lv-btn" data-lv="1" data-l="기초" data-c="#94a3b8" data-d="개념 확인 수준">1</button>
+                <button class="lv-btn on" data-lv="2" data-l="기본" data-c="#10b981" data-d="교과서 예제/유제 수준">2</button>
+                <button class="lv-btn" data-lv="3" data-l="발전" data-c="#3b82f6" data-d="유형별 응용 문제">3</button>
+                <button class="lv-btn" data-lv="4" data-l="심화" data-c="#8b5cf6" data-d="복합 개념 응용 문제">4</button>
+                <button class="lv-btn" data-lv="5" data-l="최고난도" data-c="#ef4444" data-d="수능/모의고사 킬러 수준">5</button>
+            </div>
+            <div id="lvHint" class="lv-hint">교과서 예제/유제 수준</div>
+
+            <div class="mode-btns">
+                <button id="mixBtn" class="mix-btn">단원 혼합 출제</button>
+                <button id="examBtn" class="exam-btn">시험 모드 (타이머)</button>
+                <button id="wnOpenBtn" class="wn-hbtn">📒 오답 노트 <span id="wnTotalCnt" class="wn-cnt">0</span></button>
+            </div>
+            <button id="genBtn">문제 생성하기</button>
+        </aside>
+
+        <!-- 중앙 패널: 문제 출력 -->
+        <main id="cp" class="cp">
+            <div id="emptySt" class="empty-st">
+                <div class="empty-ico">✍️</div>
+                <div class="empty-tx">왼쪽에서 단원을 선택하고<br>문제를 생성해 보세요.</div>
+            </div>
+        </main>
+
+        <!-- 우측 패널: 힌트 및 수식 입력기 -->
+        <section id="rp" class="rp">
+            <div class="rp-empty">
+                <div class="rp-empty-ico">💡</div>
+                <div class="rp-empty-tx">문제를 선택하면<br>여기에 힌트와 풀이가 나타납니다.</div>
+            </div>
+        </section>
+
+        <!-- 수식 입력기 패널 -->
+        <section id="mkPanel" class="kp">
+            <div class="kp-scroll">
+                <div class="kp-lbl">MATH KEYBOARD</div>
+                <button id="latexCopyBtn" class="latex-copy-btn">
+                    📋 수식 가져오기<br><span style="font-size:10.5px;font-weight:500;opacity:.75">(드래그 선택 후 클릭)</span>
+                </button>
+                <textarea id="mkInput" class="mk-input" placeholder="여기에 직접 입력하거나 아래 키보드를 사용하세요..."></textarea>
+                <div id="mkRendered" class="mk-rendered"><span class="mk-ph">수식 미리보기</span></div>
+                <button id="mkApplyBtn" class="mk-apply-btn">답안에 입력하기</button>
+                <button id="kbToggle" class="ty-btn">가상 키보드 열기/닫기</button>
+            </div>
+            <div id="kbArea" class="kb-area">
+                <div id="mkGrid" class="kb-inner mk-grid"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 분리된 자바스크립트 파일들 연결 (순서가 중요함) -->
+    <script src="js/core/constants.js"></script>
+    <script src="js/core/state.js"></script>
+    <script src="js/core/utils.js"></script>
+    <script src="js/ui/renderer.js"></script>
+    <script src="js/ui/keyboard.js"></script>
+    <script src="js/ui/exam.js"></script>
+    <script src="js/problems/high_math1.js"></script>
+    <script src="js/problems/high_math2.js"></script>
+    <!-- 고2, 고3 및 중등 문제는 나중에 추가 -->
+</body>
+</html>
