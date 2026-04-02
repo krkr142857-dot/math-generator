@@ -300,7 +300,8 @@ details summary::-webkit-details-marker{display:none}
 .wn-fbtn.on{border-color:var(--ac);background:var(--ac-lt);color:var(--ac);font-weight:700}
 #wnSubjRow .wn-fbtn{flex:1;min-width:0}
 .wn-sel-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:var(--bg2);border-bottom:1px solid var(--bd);font-size:11px;color:var(--sub);flex-shrink:0}
-.wn-sel-all{cursor:pointer;background:transparent;border:1.5px solid var(--bd);border-radius:6px;font-family:inherit;font-size:11px;color:var(--sub);padding:3px 9px;transition:all .15s}.wn-sel-all:hover{border-color:var(--ac);color:var(--ac)}
+.wn-sel-all{cursor:pointer;background:transparent;border:1.5px solid var(--bd);border-radius:6px;font-family:inherit;font-size:11px;color:var(--sub);padding:3px 9px;transition:all .15s}
+.wn-sel-all:hover{border-color:var(--ac);color:var(--ac)}
 .wn-selunits-all{cursor:pointer;background:transparent;border:1.5px solid var(--bd);border-radius:6px;font-family:inherit;font-size:11px;color:var(--sub);padding:3px 9px;transition:all .15s;margin-left:auto}
 .wn-selunits-all:hover{border-color:var(--ac);color:var(--ac)}
 .wn-selunits-all.on{border-color:var(--ac);background:var(--ac-lt);color:var(--ac);font-weight:700}
